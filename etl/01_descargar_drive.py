@@ -3,7 +3,7 @@ import requests
 
 print("=== Descargando Google Sheets como Excel ===")
 
-FILE_ID = "1453uzHXNpFwh1zNk6-bbxeGNg8nbGbzMAwBXmoNHsbk"
+FILE_ID = "1mjusMM5ZOo1d7o7l35Rum3jXMu1AlfkibP2AEGs89U0"  # NUEVO ID
 OUTPUT_PATH = "entrada/Ficha_Social.xlsx"
 
 # URL de exportación correcta
@@ -38,4 +38,3 @@ with open(OUTPUT_PATH, "wb") as f:
     f.write(response.content)
 
 print(f"✓ Archivo descargado correctamente → {OUTPUT_PATH}")
-
