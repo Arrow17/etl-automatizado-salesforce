@@ -36,6 +36,13 @@ jobs:
       env:
         GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
       run: python etl/procesos/solicitud_matricula/03_carga.py
+
+    - name: Subir artefacto del DF final
+      uses: actions/upload-artifact@v4
+      with:
+        name: df-final-salesforce
+        path: debug/df_final_a_subir.csv
+
       
     - name: Subir artefactos de salida
       uses: actions/upload-artifact@v4
