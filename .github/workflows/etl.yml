@@ -47,3 +47,10 @@ jobs:
     - name: Listar archivos generados
       run: ls -R .
 
+    - name: Subir artefactos de salida
+      uses: actions/upload-artifact@v4
+      with:
+        name: asistencias-consolidadas
+        path: salida/asistencias/*
+
+
