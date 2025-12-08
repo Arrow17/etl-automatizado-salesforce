@@ -41,49 +41,16 @@ import unicodedata  # Para quitar tildes
 import numpy as np   # Para valores nulos
 
 
-# 2. Conectar Drive (para guardar los resultados después)
-drive.mount('/content/drive')
-BASE_DRIVE = Path("/content/drive/MyDrive")
-
 # 3. Definir el nombre EXACTO que sale en tu imagen (sin .xlsx)
 NOMBRE_SHEET = "01 CONSOLIDADO MATRÍCULA_AFTER SCHOOL 2025"
 
-# --- BLOQUE DE BÚSQUEDA Y CONVERSIÓN ---
-print(f"🔎 Buscando archivo: '{NOMBRE_SHEET}'...")
-
-# Buscamos el ID del archivo por su nombre
-query = f"name = '{NOMBRE_SHEET}' and mimeType = 'application/vnd.google-apps.spreadsheet' and trashed = false"
-results = drive_service.files().list(q=query, fields="files(id, name)").execute()
-items = results.get('files', [])
-
-if not items:
-    sys.exit(f"❌ ERROR: No encontré la hoja '{NOMBRE_SHEET}'.\n"
-             "Asegúrate de que esté en 'Mi unidad' y el nombre sea idéntico (espacios y tildes importan).")
-
-# Tomamos el primer resultado encontrado
-file_id = items[0]['id']
-print(f"✅ Archivo encontrado (ID: {file_id}). Descargando versión temporal...")
-
-# Exportamos la Hoja de Google como Excel (.xlsx)
-request = drive_service.files().export_media(
-    fileId=file_id,
-    mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-)
-archivo_temporal = "temp_input.xlsx" # Nombre temporal en Colab
-with open(archivo_temporal, "wb") as fh:
-    fh.write(request.execute())
-
-# 4. Configuramos el script para usar ese archivo temporal
-ARCHIVO = Path(archivo_temporal)
+# 4. Configuramos el script para usar este archivo
+ARCHIVO = Path("entrada/Consolidado_Matricula_AfterSchool.xlsx")
 
 # 5. Configuración de SALIDA (Igual que antes)
-CARPETA_SALIDA = BASE_DRIVE / "00 Bases Extraídas" / "03 Cons_Mat"
-SALIDA = CARPETA_SALIDA / "consolidado_matricula_after_school_2025_UNICO.csv"
-SALIDA_CALIDAD = CARPETA_SALIDA / "consolidado_matricula_after_school_2025_CALIDAD.xlsx"
-
-# Crear carpetas de salida
-CARPETA_SALIDA.mkdir(parents=True, exist_ok=True)
-print(f"📂 Todo listo. Procesando datos...")
+CARPETA_SALIDA = Path("salida/matricula")
+SALIDA = CARPETA_SALIDA / "consolidado_matricula_afterschool_2025_UNICO.csv"
+SALIDA_CALIDAD = CARPETA_SALIDA / "consolidado_matricula_afterschool_2025_CALIDAD.xlsx"
 
 
 # === FUNCIONES DE APOYO ======================================================
