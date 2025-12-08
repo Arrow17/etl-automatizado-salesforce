@@ -45,7 +45,7 @@ jobs:
     - name: Ejecutar Asistencia Extracurricular -Transformacion
       env:
         GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      run: etl/procesos/asistencia_extracurricular/02_transformacion.py
+      run: python etl/procesos/asistencia_extracurricular/02_transformacion.py
 
     - name: Subir archivo final como artefacto
       uses: actions/upload-artifact@v4
