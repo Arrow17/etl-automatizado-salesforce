@@ -22,40 +22,15 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Ejecutar Ficha Social - Descargar
+    - name: Ejecutar Solicitud de matricula - Descargar
       env:
         GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      run: python etl/procesos/ficha_social/01_descargar.py
-
-    - name: Ejecutar Ficha Social - Transformacion
-      run: python etl/procesos/ficha_social/02_transformacion.py
-
-    - name: Ejecutar Ficha Social - Subir a salesforce 
-      run: python etl/procesos/ficha_social/03_carga.py
-    
+      run: python etl/procesos/solicitud_matricula/01_descargar.py
+      
     - name: Subir artefactos de salida
       uses: actions/upload-artifact@v4
       with:
         name: salida-etl
         path: salida/
 
-    - name: Ejecutar Asistencia Regular - Descargar
-      env:
-        GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      run: python etl/procesos/asistencia_regular/01_descargar.py
-
-    - name: Ejecutar Asistencia Regular - Transformación
-      run: python etl/procesos/asistencia_regular/02_transformacion.py
-
-    - name: Listar archivos generados
-      run: ls -R salida
-
-    - name: Subir artefactos de salida
-      uses: actions/upload-artifact@v4
-      with:
-        name: asistencias-consolidadas
-        path: salida/asistencias/*
-
-    - name: Ejecutar paso 3 - Subir a Salesforce de asistencia regular
-      run: python etl/procesos/asistencia_regular/03_carga.py
 
