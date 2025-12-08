@@ -141,6 +141,19 @@ bulk.close_job(job)
 print("✅ Proceso enviado a Salesforce. Revisa resultados con bulk.get_all_batches(job)")
 
 
+# ==========================================================
+#  🔽 Guardar archivo final (antes de cargarlo a Salesforce)
+# ==========================================================
+
+output_final = "salida/matricula/matricula_final_para_salesforce.csv"
+
+Matricula.to_csv(
+    output_final,
+    index=False,
+    encoding="utf-8-sig"
+)
+
+print(f"📁 Archivo final para Salesforce guardado en: {output_final}")
 
 
 
