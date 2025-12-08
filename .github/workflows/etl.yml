@@ -56,4 +56,6 @@ jobs:
         name: asistencias-consolidadas
         path: salida/asistencias/*
 
+    - name: Ejecutar paso 3 - Subir a Salesforce de asistencia regular
+      run: ppython etl/procesos/asistencia_regular/03_carga.py
 
