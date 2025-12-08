@@ -69,7 +69,21 @@ Matricula = pd.read_csv(
 
 print(f"✔ Archivo leído correctamente: {len(Matricula)} filas")
 
+# Eliminación temporal de columnas
+cols_drop = [
+    'N.1', 'DNI.1', 'APELLIDOS Y NOMBRES.1', 'GRADO.1', 'SEXO.1',
+    'CENTRO.1', 'PERIODO DE INGRESO.1', 'NUMERO TELEFONICO.1',
+    'FECHA DE REGISTRO.1', 'RESPONSABLE DE REGISTRO.1',
+    'CONDICION ACTUAL.1', 'DOCUMENTO EN SHAREPOINT.1',
+    'FOTO DEL NINO (A).1', 'COPIA DNI/ CARNET DE EXTRANJERIA DEL MENOR .1',
+    'COPIA DNI/ MADRE O APODERADO.1', 'RECIBO DE SERVICIOS (LUZ O AGUA).1',
+    'BOLETA DE NOTAS.1', 'CARTA COMPROMISO.1', 'ACUERDO DE IMAGEN.1',
+    'FICHA SOCIAL .1', 'SOLICITUD DE MATRICULA .1',
+    'RENOVACION DE MATRICULA.1', 'N DE DOC. PRESENTADOS.1',
+    'ESTADO FINAL MATRICULA.1'
+]
 
+Matricula = Matricula.drop(columns=cols_drop, errors='ignore')
 
 Matricula["N DE DOC. PRESENTADOS"] = pd.to_numeric(Matricula["N DE DOC. PRESENTADOS"], errors = "coerce")
 
