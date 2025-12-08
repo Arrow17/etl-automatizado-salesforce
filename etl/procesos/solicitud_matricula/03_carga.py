@@ -74,7 +74,7 @@ mapeo = {
   # Campos básicos
     "Marca temporal": "Marca_temporal__c",
     "Dirección de correo electrónico": "Direccin_de_correo_electrnico__c",
-    "Nombre/s del niño/a": "Nombres_del_nioa__c",
+    "Nombre/S Del Niño/A": "Nombres_del_nioa__c",
     "Apellido Paterno": "Apellido_Paterno__c",
     "Apellido Materno": "Apellido_Materno__c",
     "Documento de Identidad": "Documento_de_Identidad__c",
