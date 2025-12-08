@@ -28,8 +28,7 @@ df = df.rename(columns=mapeo)
 
 # Convertir todo a string excepto fecha
 for col in df.columns:
-    if col != "Marca_temporal__c":
-        df[col] = df[col].astype(str)
+    df[col] = df[col].astype(str)
 
 # Limpiar NaN
 df = df.replace({np.nan: None, pd.NA: None})
