@@ -39,19 +39,18 @@ import re
 from collections import Counter
 import unicodedata  # Para quitar tildes
 import numpy as np   # Para valores nulos
+from pathlib import Path
 
-
-# 3. Definir el nombre EXACTO que sale en tu imagen (sin .xlsx)
-NOMBRE_SHEET = "01 CONSOLIDADO MATRÍCULA_AFTER SCHOOL 2025"
 
 # 4. Configuramos el script para usar este archivo
 ARCHIVO = Path("entrada/Consolidado_Matricula_AfterSchool.xlsx")
 
 # 5. Configuración de SALIDA (Igual que antes)
 CARPETA_SALIDA = Path("salida/matricula")
+CARPETA_SALIDA.mkdir(parents=True, exist_ok=True)
+
 SALIDA = CARPETA_SALIDA / "consolidado_matricula_afterschool_2025_UNICO.csv"
 SALIDA_CALIDAD = CARPETA_SALIDA / "consolidado_matricula_afterschool_2025_CALIDAD.xlsx"
-
 
 # === FUNCIONES DE APOYO ======================================================
 def _excel_error_tokens():
