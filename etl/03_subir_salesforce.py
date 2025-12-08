@@ -6,6 +6,46 @@ from io import BytesIO
 import os
 from utils2.mapeo import mapeo
 
+print("=== Eliminación de resultados previos Salesforce ===")
+
+# Conexión
+sf = Salesforce(
+    username='salesforce@kantayaperu.com.t4t',
+    password='4uto.KP25',
+    security_token='5BYv5tsEL1Iu8hL2bEXIFed5',
+    domain='test'
+)
+
+bulk = SalesforceBulk(
+    username='salesforce@kantayaperu.com.t4t',
+    password='4uto.KP25',
+    security_token='5BYv5tsEL1Iu8hL2bEXIFed5',
+    sandbox=True
+)
+
+# 1️⃣ Consultar todos los IDs del objeto personalizado
+query = "SELECT Id FROM Ficha_social_e__c"
+records = sf.query_all(query)['records']
+
+if not records:
+    print("No hay registros para eliminar.")
+else:
+    ids = [{"Id": r["Id"]} for r in records]
+
+    # 2️⃣ Crear job de eliminación
+    job = bulk.create_delete_job("Ficha_social_e__c", contentType='JSON')
+
+    # 3️⃣ Enviar en lotes
+    batch_size = 10000
+    for i in range(0, len(ids), batch_size):
+        batch_records = ids[i:i+batch_size]
+        json_bytes = json.dumps(batch_records).encode('utf-8')
+        bulk.post_batch(job, IteratorBytesIO(iter([json_bytes])))
+
+    # 4️⃣ Cerrar job
+    bulk.close_job(job)
+    print(f"Se enviaron {len(ids)} registros para eliminación.")
+
 
 
 print("=== Iniciando carga a Salesforce ===")
