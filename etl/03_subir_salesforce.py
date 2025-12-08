@@ -1,4 +1,6 @@
-# Leer archivo limpio
+print("=== Iniciando carga a Salesforce ===")
+
+print("🔎 Cargando archivo limpio...")
 df = pd.read_excel(
     "salida/Ficha_Social_v2.xlsx",
     dtype={
@@ -8,16 +10,19 @@ df = pd.read_excel(
     }
 )
 
-# Renombrar columnas → Salesforce
+print("🔎 Cargando mapeo de utils2/mapeo.py...")
+print("Mapeo contiene:", len(mapeo), "columnas")
+
+# Aplicar mapeo
 df = df.rename(columns=mapeo)
 
-# Convertir todo a string excepto Marca_temporal__c
+# Convertir todo a string excepto fecha
 for col in df.columns:
     if col != "Marca_temporal__c":
         df[col] = df[col].astype(str)
 
 # Limpiar NaN
-df = df.replace({np.nan: None})
+df = df.replace({np.nan: None, pd.NA: None})
 
 records = df.to_dict("records")
 
