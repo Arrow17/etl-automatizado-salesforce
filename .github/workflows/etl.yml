@@ -28,6 +28,13 @@ jobs:
         AZ_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
         AZ_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
       run: python etl/procesos/calificaciones_area_competencia/01_descarga.py
+
+    - name: Ejecutar Calificaciones área y competencias - Transformacion
+      env:
+        AZ_TENANT_ID: ${{ secrets.AZ_TENANT_ID }}
+        AZ_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
+        AZ_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+      run: python etl/procesos/calificaciones_area_competencia/02_transformacion.py
     
     - name: Subir artefacto del Excel descargado
       uses: actions/upload-artifact@v4
@@ -35,6 +42,17 @@ jobs:
         name: PE25_Ventanilla_Resultados
         path: entrada/PE25_Ventanilla_Resultados.xlsx
 
+    - name: Subir Consolidado Áreas
+      uses: actions/upload-artifact@v4
+      with:
+        name: BD_Promedios_Areas_Consolidado
+        path: salida/promedios_areas/BD_Promedios_Areas_Consolidado.csv
+
+    - name: Subir Codebook Áreas
+      uses: actions/upload-artifact@v4
+      with:
+        name: BD_Promedios_Areas_Calidad
+        path: salida/promedios_areas/BD_Promedios_Areas_CALIDAD.xlsx
 
     - name: Subir artefacto Encuesta Padres Deduplicado
       uses: actions/upload-artifact@v4
