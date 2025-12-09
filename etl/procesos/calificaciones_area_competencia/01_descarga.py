@@ -58,13 +58,19 @@ print("\n=== Obteniendo DRIVE_ID ===")
 drives_url = f"https://graph.microsoft.com/v1.0/sites/{SITE_ID}/drives"
 drives_info = requests.get(drives_url, headers=headers).json()
 
-DRIVE_ID = None
+print("\n=== Lista de DRIVES encontrados ===")
 for d in drives_info["value"]:
-    if d["name"] in ["Documentos", "Shared Documents"]:
+    print(f"- name: {d['name']} | id: {d['id']}")
+
+DRIVE_ID = None
+# Intentar elegir automáticamente el primero que NO sea system drive
+for d in drives_info["value"]:
+    if d["name"] not in ["Form Templates"]:
         DRIVE_ID = d["id"]
         break
 
-print("DRIVE_ID:", DRIVE_ID)
+print("\nDRIVE_ID detectado automáticamente:", DRIVE_ID)
+
 
 # ==============================
 # 4️⃣ Descargar archivo
