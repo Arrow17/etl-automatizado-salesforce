@@ -35,6 +35,27 @@ jobs:
         AZ_CLIENT_ID: ${{ secrets.AZ_CLIENT_ID }}
         AZ_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
       run: python etl/procesos/calificaciones_area_competencia/02_transformacion.py
+
+
+    - name: Ejecutar Asistencia Regular - Descargar
+      env:
+        GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      run: python etl/procesos/asistencia_regular/01_descargar.py
+
+    - name: Ejecutar Asistencia Regular - Transformación
+      run: python etl/procesos/asistencia_regular/02_transformacion.py
+
+    - name: Listar archivos generados
+      run: ls -R salida
+
+    - name: Subir artefactos de salida
+      uses: actions/upload-artifact@v4
+      with:
+        name: asistencias-consolidadas
+        path: salida/asistencias/*
+
+    - name: Ejecutar paso 3 - Subir a Salesforce de asistencia regular
+      run: python etl/procesos/asistencia_regular/03_carga.py
     
     - name: Subir artefacto del Excel descargado
       uses: actions/upload-artifact@v4
