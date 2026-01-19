@@ -287,6 +287,31 @@ def renombrar_por_posicion(df: pd.DataFrame, columnas_base: list[str]) -> pd.Dat
     out.columns = columnas_base
     return out
 
+def clean_dni(x):
+    if pd.isna(x):
+        return np.nan
+
+    # 1) Si viene numérico (incluye numpy floats)
+    if isinstance(x, (int, np.integer)):
+        return str(x)
+
+    if isinstance(x, (float, np.floating)):
+        if np.isfinite(x):
+            return str(int(x))
+        return np.nan
+
+    # 2) Si viene como texto (ya fue convertido antes)
+    s = str(x).strip()
+
+    # Caso típico: "79952505.0" -> "79952505"
+    if re.fullmatch(r"\d+\.0+", s):
+        s = s.split(".")[0]
+
+    # Quitar todo lo no numérico
+    s = re.sub(r"\D", "", s)
+
+    return s if s else np.nan
+
 def filtrar_sin_dni(df: pd.DataFrame) -> pd.DataFrame:
     """Filtra y elimina las filas que no contienen valores en la columna 'DNI'."""
     if df.empty:
@@ -300,11 +325,8 @@ def filtrar_sin_dni(df: pd.DataFrame) -> pd.DataFrame:
         return df
 
     # Limpiar DNI antes de filtrar (eliminar caracteres no numéricos y '0' exacto)
-    df[col_dni] = df[col_dni].apply(
-    lambda x: str(int(x)) if isinstance(x, float) and not pd.isna(x)
-    else re.sub(r"\D", "", str(x)) if pd.notna(x)
-    else np.nan)
-
+    df[col_dni] = df[col_dni].apply(clean_dni)
+    
     df = df[~df[col_dni].isna()]
     df = df[df[col_dni].astype(str).str.strip() != ""]
     return df
