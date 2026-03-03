@@ -22,6 +22,9 @@ jobs:
       run: |
         pip install -r requirements.txt
     
+  # ============================================================
+  # 🔹 ASISTENCIA REGULAR
+  # ============================================================
 
     - name: Ejecutar Asistencia Regular - Descargar
       env:
@@ -30,6 +33,28 @@ jobs:
 
     - name: Ejecutar Asistencia Regular - Transformación
       run: python etl/procesos/asistencia_regular/02_transformacion.py
+
+    - name: Ejecutar paso 3 - Subir a Salesforce de asistencia regular
+      run: python etl/procesos/asistencia_regular/03_carga.py
+
+  # ============================================================
+  # 🔹 ASISTENCIA EXTRACURRICULAR
+  # ============================================================
+
+    - name: Asistencia Extracurricular - Descargar
+      env:
+        GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      run: python etl/procesos/asistencia_extracurricular/01_descarga.py
+
+    - name: Asistencia Extracurricular - Transformación
+      run: python etl/procesos/asistencia_extracurricular/02_transformacion.py
+
+    - name: Asistencia Extracurricular - Carga
+      run: python etl/procesos/asistencia_extracurricular/03_carga.py
+
+  # ============================================================
+  # 🔹 MATRÍCULA
+  # ============================================================
 
     - name: Ejecutar Matricula - Descarga
       env:
@@ -45,24 +70,28 @@ jobs:
       env:
         GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
       run: python etl/procesos/matricula/03_carga.py
-      
+    
+    # ============================================================
+    # 🔹 Artefactos
+    # ============================================================
+         
     - name: Listar archivos generados
       run: ls -R salida
 
-    - name: Subir artefactos de salida
+    - name: Subir artefactos de salida - Extracurricular
       uses: actions/upload-artifact@v4
       with:
-        name: asistencias-consolidadas
+        name: asistencias-extracurriculares-consolidada
+        path: salida/asistencias_extracurriculares/*
+
+    - name: Subir artefactos de salida - Asistencia regular
+      uses: actions/upload-artifact@v4
+      with:
+        name: asistencias-regular-consolidada
         path: salida/asistencias/*
 
-    - name: Ejecutar paso 3 - Subir a Salesforce de asistencia regular
-      run: python etl/procesos/asistencia_regular/03_carga.py
-
-    - name: Subir artefactos de salida - matrícula
+    - name: Subir artefactos de salida - Matrícula
       uses: actions/upload-artifact@v4
       with:
         name: matricula-consolidada
         path: salida/matricula/*
-
-    
-
