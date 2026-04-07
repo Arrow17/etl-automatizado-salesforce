@@ -8,8 +8,8 @@ import unicodedata
 # PATHS
 # ==========================================================
 
-INPUT_FILE = Path("data/raw/2025/after_school/horarios_after_school_2025.xlsx")
-OUTPUT_DIR = Path("data/processed/2025/after_school")
+INPUT_FILE = Path("data/raw/2025/horario_regular/horario_regular_2025.xlsx")
+OUTPUT_DIR = Path("data/processed/2025/horario_regular")
 OUTPUT_FILE = OUTPUT_DIR / "base_horaria_final.csv"
 
 SEMANAS_POR_BIMESTRE = 8
