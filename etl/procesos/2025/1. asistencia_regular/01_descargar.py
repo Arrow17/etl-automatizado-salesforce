@@ -6,7 +6,7 @@ from googleapiclient.http import MediaIoBaseDownload
 
 # === CONFIGURACIÓN ===
 FOLDER_ID = "1J2KLHlwgc_aWayet6EJiEa7aECmHXcDi"  # Nueva carpeta Drive
-OUTPUT_DIR = "entrada/asistencias"
+OUTPUT_DIR = "data/raw/2025/asistencia_regular"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
