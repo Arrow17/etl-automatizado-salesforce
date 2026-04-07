@@ -2,36 +2,6 @@
 """
 SCRIPT DE CONSOLIDACIÓN DE MATRÍCULAS
 --------------------------------------
-
-📘 Descripción general
-----------------------
-Este script permite consolidar múltiples hojas de un archivo Excel en una sola base de datos
-limpia y estandarizada. Fue diseñado para integrarse dentro de procesos de control o
-seguimiento de matrículas, evaluaciones u otros registros administrativos de centros educativos.
-
-📋 Funcionalidades principales
-------------------------------
-✔ Procesa automáticamente todas las hojas del archivo cuyo nombre empiece con 01, 02, 03, etc.
-✔ Lee una única tabla por hoja, iniciando en la celda C5 (header=4 en Python).
-✔ Limpia encabezados y datos eliminando:
-    - Tabulaciones (\t)
-    - Saltos de línea (\r, \n)
-    - Espacios múltiples
-    - Paréntesis y asteriscos en encabezados (“(*)”)
-    - Tildes y diferencias de mayúsculas/minúsculas
-✔ Unifica todas las hojas en una sola tabla:
-    - Toma como referencia el grupo de hojas con la misma cantidad de columnas (estructura base).
-    - Agrega las columnas adicionales de otras hojas al final, manteniendo la consistencia.
-✔ Elimina:
-    - Filas sin valor en la columna “DNI”.
-    - Filas que contienen encabezados repetidos dentro de los datos.
-✔ Uniformiza campos clave (GRADO, SEXO, CENTRO, CONDICION ACTUAL, FECHA DE REGISTRO).
-✔ Exporta dos archivos:
-    1. Un CSV limpio con separador de comas.
-    2. Un reporte de calidad de datos (Codebook) en formato Excel.
-
-👤 Autor: Christian Rodriguez
-🗓️ Versión: Final (Actualizada v1.7) – Noviembre 2025
 """
 # === LIBRERÍAS ===============================================================
 import pandas as pd
