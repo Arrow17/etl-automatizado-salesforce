@@ -1,59 +1,110 @@
 import os
+from pathlib import Path
 import requests
+from dotenv import load_dotenv
 
-print("=== Descargando archivo desde SharePoint ===")
 
-TENANT_ID = os.environ["AZ_TENANT_ID"]
-CLIENT_ID = os.environ["AZ_CLIENT_ID"]
-CLIENT_SECRET = os.environ["AZ_CLIENT_SECRET"]
+load_dotenv()
 
-# NOMBRE EXACTO DEL ARCHIVO EN SHAREPOINT
-FILE_NAME = "PE25_Ventanilla y proyectos_Resultados Power BI VF.xlsx"
+CLIENT_SECRET = "W~j8Q~rylnObnr-6g8l7YCBXlwfkABQowMLB.a-7"
+CLIENT_ID = "338d0875-39c7-44fe-8f78-db08df73b6f0"
+TENANT_ID = "0324f870-1d9c-40a6-9a4c-e1e1a1464f9d"
 
-# SALIDA LOCAL
-OUTPUT_PATH = "entrada/PE25_Ventanilla_Resultados.xlsx"
-os.makedirs("entrada", exist_ok=True)
-
-# ============================================================
-# 1) Obtener token
-# ============================================================
-token_url = f"https://login.microsoftonline.com/{TENANT_ID}/oauth2/v2.0/token"
-
-data = {
-    "client_id": CLIENT_ID,
-    "client_secret": CLIENT_SECRET,
-    "scope": "https://graph.microsoft.com/.default",
-    "grant_type": "client_credentials"
-}
-
-resp = requests.post(token_url, data=data)
-resp.raise_for_status()
-token = resp.json()["access_token"]
-
-headers = {"Authorization": f"Bearer {token}"}
-
-# ============================================================
-# 2) SITE_ID y DRIVE_ID ya detectados
-# ============================================================
-SITE_ID = "analyticsadvancedconsulting.sharepoint.com,66aec61b-24b6-4190-ad48-bcf8d47c7825,15c34463-4775-42b4-9b39-cf5266896971"
-DRIVE_ID = "b!G8auZrYkkEGtSLz41Hx4JWNEwxV1R7RCmznPUmaJaXF3zp1RuYlNSI5iAham6BG7"
-
-# ============================================================
-# 3) URL correcta de descarga App-Only
-# ============================================================
-download_url = (
-    f"https://graph.microsoft.com/v1.0/sites/{SITE_ID}"
-    f"/drives/{DRIVE_ID}/root:/{FILE_NAME}:/content"
+HOSTNAME = os.getenv("SHAREPOINT_HOSTNAME", "kantaya.sharepoint.com")
+SITE_PATH = os.getenv("SHAREPOINT_SITE_PATH", "/sites/EducativoKantaya")
+FILE_NAME = os.getenv(
+    "SHAREPOINT_FILE_NAME",
+    "Comparativa_Ventanilla y proyectos_Power BI Provisional.xlsx"
 )
 
-print("Descargando:", FILE_NAME)
-resp = requests.get(download_url, headers=headers)
+RAW_DIR = Path("data/raw/2025/4.calificaciones_area_competencia")
+RAW_FILE_PATH = RAW_DIR / "comparativa_ventanilla_proyectos.xlsx"
 
-if resp.status_code != 200:
-    print("❌ Error al descargar archivo:", resp.text)
-    raise SystemExit(1)
 
-with open(OUTPUT_PATH, "wb") as f:
-    f.write(resp.content)
+def validar_variables_entorno() -> None:
+    required_vars = {
+        "SHAREPOINT_CLIENT_ID": CLIENT_ID,
+        "SHAREPOINT_CLIENT_SECRET": CLIENT_SECRET,
+        "SHAREPOINT_TENANT_ID": TENANT_ID,
+    }
 
-print(f"✓ Archivo descargado correctamente → {OUTPUT_PATH}")
+    faltantes = [k for k, v in required_vars.items() if not v]
+    if faltantes:
+        raise EnvironmentError(
+            f"Faltan variables de entorno requeridas: {', '.join(faltantes)}"
+        )
+
+
+def get_access_token() -> str:
+    url = f"https://login.microsoftonline.com/{TENANT_ID}/oauth2/v2.0/token"
+    data = {
+        "client_id": CLIENT_ID,
+        "client_secret": CLIENT_SECRET,
+        "scope": "https://graph.microsoft.com/.default",
+        "grant_type": "client_credentials",
+    }
+
+    response = requests.post(url, data=data, timeout=30)
+    response.raise_for_status()
+    return response.json()["access_token"]
+
+
+def get_site_id(access_token: str) -> str:
+    url = f"https://graph.microsoft.com/v1.0/sites/{HOSTNAME}:{SITE_PATH}"
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    response = requests.get(url, headers=headers, timeout=30)
+    response.raise_for_status()
+    return response.json()["id"]
+
+
+def get_item_id_by_filename(access_token: str, site_id: str, file_name: str) -> str:
+    headers = {"Authorization": f"Bearer {access_token}"}
+    url = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drive/root/search(q='{file_name}')"
+
+    response = requests.get(url, headers=headers, timeout=30)
+    response.raise_for_status()
+
+    results = response.json().get("value", [])
+    if not results:
+        raise FileNotFoundError(f"No se encontró el archivo: {file_name}")
+
+    exact_match = next((item for item in results if item.get("name") == file_name), None)
+    selected = exact_match or results[0]
+    return selected["id"]
+
+
+def download_file(file_name: str, output_path: Path) -> Path:
+    access_token = get_access_token()
+    site_id = get_site_id(access_token)
+    item_id = get_item_id_by_filename(access_token, site_id, file_name)
+
+    headers = {"Authorization": f"Bearer {access_token}"}
+    download_url = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drive/items/{item_id}/content"
+
+    response = requests.get(
+        download_url,
+        headers=headers,
+        timeout=120,
+        allow_redirects=True,
+    )
+    response.raise_for_status()
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_bytes(response.content)
+
+    return output_path
+
+
+def main() -> None:
+    print("=== INICIANDO DESCARGA ===")
+    validar_variables_entorno()
+
+    downloaded_path = download_file(FILE_NAME, RAW_FILE_PATH)
+
+    print("✅ DESCARGA COMPLETADA")
+    print(f"Archivo guardado en: {downloaded_path.resolve()}")
+
+
+if __name__ == "__main__":
+    main()
