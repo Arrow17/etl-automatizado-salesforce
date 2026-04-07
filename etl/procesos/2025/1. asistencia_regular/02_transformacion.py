@@ -17,6 +17,7 @@ NOMBRE_CARPETA = "01 REGULAR - ASISTENCIAS 2025"
 # Definimos las rutas base en la nube
 CARPETA = Path("data/raw/2025/asistencia_regular")
 CARPETA_SALIDA = Path("data/processed/2025/asistencia_regular")
+ARCHIVO_SALIDA = CARPETA_SALIDA / "asistencias_2025_limpio.csv"
 
 if not CARPETA.exists():
     raise Exception(f"❌ La carpeta de entrada no existe: {CARPETA}")
