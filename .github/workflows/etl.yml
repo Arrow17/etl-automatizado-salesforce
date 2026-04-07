@@ -80,10 +80,10 @@ jobs:
         SHAREPOINT_HOSTNAME: kantaya.sharepoint.com
         SHAREPOINT_SITE_PATH: /sites/EducativoKantaya
         SHAREPOINT_FILE_NAME: Comparativa_Ventanilla y proyectos_Power BI Provisional.xlsx
-      run: python etl/procesos/2025/4. calificaciones_area_competencia/01_descarga.py
+      run: python "etl/procesos/2025/4. calificaciones_area_competencia/01_descarga.py"
 
     - name: Calificaciones Área Competencia - Transformación
-      run: python etl/procesos/2025/4. calificaciones_area_competencia/02_transformacion.py
+      run: python "etl/procesos/2025/4. calificaciones_area_competencia/02_transformacion.py"
 
 
     
