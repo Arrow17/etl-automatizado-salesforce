@@ -2,57 +2,6 @@
 """
 CONSOLIDACIÓN DE LISTAS DE ASISTENCIA (Kantaya)
 -----------------------------------------------
-
-📘 Descripción general
-Este script consolida las listas de asistencia a partir de múltiples archivos Excel,
-detecta y transforma automáticamente las columnas de fechas (ancho → largo),
-normaliza nombres de alumnos, mantiene columnas de totales, incorpora trazabilidad
-(archivo y hoja) y, cuando está disponible, asocia el nombre del TUTOR por hoja.
-
-Al finalizar, genera dos salidas:
-1. asistencias_consolidado_kantaya.csv: La base de datos larga y limpia.
-2. asistencias_consolidado_kantaya_CALIDAD.xlsx: Un reporte de calidad (codebook)
-   del archivo final.
-
-🔎 Alcance y reglas clave
-1) Entrada:
-   - Se procesan TODOS los archivos Excel (y subcarpetas) en la carpeta indicada.
-   - Extensiones válidas: .xlsx, .xls, .xlsm.
-   - Se excluyen archivos temporales que comienzan con "~$".
-
-2) Selección de hojas:
-   - Se consideran solo las hojas cuyo nombre contenga "asist", "asistencia"
-     (admite variantes básicas por errores de tipeo).
-
-3) Extracción por hoja:
-   - Se parte del encabezado en fila 7 (C7); pandas usa base 0 → header=6.
-   - Se detectan columnas "fecha" por heurística (tipos datetime, serial Excel,
-     o cadenas parseables) y se define el rango hasta "última fecha + 3 columnas"
-     (para preservar "esperadas", "reales" y "%").
-
-4) Normalización de identidad:
-   - Se unifican nombres en una columna "nombre_completo" priorizando:
-       a) NOMBRES + APELLIDO PATERNO + APELLIDO MATERNO,
-       b) APELLIDOS + NOMBRES,
-       c) Columna única de nombre (NOMBRE / ALUMNO / NOMBRE COMPLETO).
-   - Se evita el patrón duplicado "Apellido, Apellido".
-
-5) Reglas de limpieza:
-   - Se eliminan únicamente filas SIN DNI (si existe la columna).
-   - Se conservan alumnos con DNI aun sin asistencias marcadas.
-
-6) Salida:
-   - Formato final: largo por fecha, con las 3 columnas de totales (si existen),
-     trazabilidad (ARCHIVO_ORIGEN, HOJA_ORIGEN), TUTOR (si se detecta),
-     y columnas de fecha en formato dd/mm/yyyy.
-   - CSV con codificación UTF-8 con BOM para compatibilidad con Excel.
-
-🧰 Dependencias
-- pandas
-- openpyxl (requerido para leer .xlsx y escribir el reporte de calidad)
-
-👤 Autor: Christian Rodriguez
-🗓️ Versión: Octubre 2025 (Modificado)
 """
 
 import pandas as pd
@@ -66,8 +15,8 @@ from pathlib import Path
 NOMBRE_CARPETA = "01 REGULAR - ASISTENCIAS 2025"
 
 # Definimos las rutas base en la nube
-CARPETA = Path("entrada/asistencias")
-CARPETA_SALIDA = Path("salida/asistencias")
+CARPETA = Path("data/raw/2025/asistencia_regular")
+CARPETA_SALIDA = Path("data/processed/2025/asistencia_regular")
 
 if not CARPETA.exists():
     raise Exception(f"❌ La carpeta de entrada no existe: {CARPETA}")
