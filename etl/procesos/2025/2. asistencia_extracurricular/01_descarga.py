@@ -5,7 +5,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
 # === CONFIGURACIÓN ===
-FOLDER_ID = "1dbEXE0clQfHiNVtfhUalUeHdVOu_Zb-1"  
+FOLDER_ID = "1uvKv7XZak8F4xK9D_EL4hlnfdN-ZAw98"
 OUTPUT_DIR = "data/raw/2025/asistencias_extracurriculares"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
