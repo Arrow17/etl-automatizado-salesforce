@@ -13,10 +13,10 @@ from pathlib import Path
 
 
 # 4. Configuramos el script para usar este archivo
-ARCHIVO = Path("entrada/Consolidado_Matricula_AfterSchool.xlsx")
+ARCHIVO = Path("data/raw/2025/matricula/Consolidado_Matricula_AfterSchool.xlsx")
 
-# 5. Configuración de SALIDA (Igual que antes)
-CARPETA_SALIDA = Path("salida/matricula")
+# 5. Configuración de SALIDA
+CARPETA_SALIDA = Path("data/processed/2025/matricula")
 CARPETA_SALIDA.mkdir(parents=True, exist_ok=True)
 
 SALIDA = CARPETA_SALIDA / "consolidado_matricula_afterschool_2025_UNICO.csv"
