@@ -85,7 +85,19 @@ jobs:
     #- name: Calificaciones Área Competencia - Transformación
     #  run: python "etl/procesos/2025/4. calificaciones_area_competencia/02_transformacion.py"
 
+  # ============================================================
+  # 🔹 HORARIO REGULAR
+  # ============================================================
 
+    - name: Horario Regular - Descargar
+      env:
+        SHAREPOINT_HOSTNAME: kantaya.sharepoint.com
+        SHAREPOINT_SITE_PATH: /sites/EducativoKantaya
+        SHAREPOINT_FILE_NAME: 02 HORARIOS_AFTER SCHOOL 2025.xlsx
+      run: python "etl/procesos/2025/10. Horario regular/01_descarga.py"
+
+    - name: Horario Regular - Transformación
+      run: python "etl/procesos/2025/10. Horario regular/02_transformacion.py"
     
     # ============================================================
     # 🔹 Artefactos
@@ -125,4 +137,16 @@ jobs:
     #  with:
     #    name: calificaciones-area-competencia-processed
     #    path: data/processed/2025/4.calificaciones_area_competencia/*
+
+    - name: Subir artefacto raw - Horario Regular
+      uses: actions/upload-artifact@v4
+      with:
+        name: horario-regular-raw
+        path: data/raw/2025/horario_regular/*
+
+    - name: Subir artefacto processed - Horario Regular
+      uses: actions/upload-artifact@v4
+      with:
+        name: horario-regular-processed
+        path: data/processed/2025/horario_regular/*
 
