@@ -1,8 +1,8 @@
 pandas
 numpy
 openpyxl
-
 requests
+python-dotenv
 
 google-api-python-client
 google-auth
