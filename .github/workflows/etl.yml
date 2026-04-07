@@ -26,35 +26,39 @@ jobs:
   # 🔹 ASISTENCIA REGULAR
   # ============================================================
 
-    - name: Ejecutar Asistencia Regular 2025 - Descargar
-      env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      run: python "etl/procesos/2025/1. asistencia_regular/01_descargar.py"
+    #- name: Ejecutar Asistencia Regular 2025 - Descargar
+    #  env:
+    #      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+    #  run: python "etl/procesos/2025/1. asistencia_regular/01_descargar.py"
 
-    - name: Ejecutar Asistencia Regular 2025 - Transformación
-      run: python "etl/procesos/2025/1. asistencia_regular/02_transformacion.py"
+    #- name: Ejecutar Asistencia Regular 2025 - Transformación
+    #  run: python "etl/procesos/2025/1. asistencia_regular/02_transformacion.py"
       
-    - name: Ejecutar Consolidación - Asistencia Regular
-      run: python "etl/procesos/consolidacion/1_asistencia_regular.py"
+    #- name: Ejecutar Consolidación - Asistencia Regular
+    #  run: python "etl/procesos/consolidacion/1_asistencia_regular.py"
     
-    - name: Ejecutar paso final - Subir a Salesforce de asistencia regular
-      run: python "etl/procesos/carga/01_asistencia_regular.py"
+    #- name: Ejecutar paso final - Subir a Salesforce de asistencia regular
+    # run: python "etl/procesos/carga/01_asistencia_regular.py"
 
 
   # ============================================================
   # 🔹 ASISTENCIA EXTRACURRICULAR
   # ============================================================
+    
+    - name: Ejecutar Extracurriculares 2025 - Descargar
+      env:
+        GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      run: python "etl/procesos/2025/2. asistencias_extracurriculares/01_descargar.py"
+    
+    - name: Ejecutar Extracurriculares 2025 - Transformación
+      run: python "etl/procesos/2025/2. asistencias_extracurriculares/02_transformacion.py"
+    
+    - name: Ejecutar Consolidación - Extracurriculares
+      run: python "etl/procesos/consolidacion/2_asistencia_extracurricular.py"
+    
+    - name: Ejecutar carga a Salesforce - Extracurriculares
+      run: python "etl/procesos/carga/02_asistencia_extracurricular.py"
 
-    #- name: Asistencia Extracurricular - Descargar
-    #  env:
-    #    GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-    #  run: python etl/procesos/asistencia_extracurricular/01_descarga.py
-
-    #- name: Asistencia Extracurricular - Transformación
-    #  run: python etl/procesos/asistencia_extracurricular/02_transformacion.py
-
-    #- name: Asistencia Extracurricular - Carga
-    #  run: python etl/procesos/asistencia_extracurricular/03_carga.py
 
   # ============================================================
   # 🔹 MATRÍCULA
@@ -154,23 +158,17 @@ jobs:
         ls -R data/raw || true
         ls -R data/processed || true
 
-    - name: Subir artefactos de salida - Asistencia regular
-      uses: actions/upload-artifact@v4
-      with:
-        name: asistencias-regular-consolidada
-        path: data/consolidated/asistencia_regular/*
-
-    #- name: Subir artefactos de salida - Extracurricular
-    #  uses: actions/upload-artifact@v4
-    #  with:
-    #    name: asistencias-extracurriculares-consolidada
-    #    path: salida/asistencias_extracurriculares/*
-
     #- name: Subir artefactos de salida - Asistencia regular
     #  uses: actions/upload-artifact@v4
     #  with:
     #    name: asistencias-regular-consolidada
-    #    path: salida/asistencias/*
+    #    path: data/consolidated/asistencia_regular/*
+
+    - name: Subir artefactos - Extracurriculares
+      uses: actions/upload-artifact@v4
+      with:
+        name: asistencias-extracurriculares-consolidado
+        path: data/consolidated/asistencias_extracurriculares/*
 
     #- name: Subir artefactos de salida - Matrícula
     #  uses: actions/upload-artifact@v4
@@ -232,9 +230,9 @@ jobs:
     #    name: impacto-habilidades-raw
     #    path: data/raw/2025/impacto_habilidades/*
 
-    - name: Subir artefacto processed - Impacto Habilidades
-      uses: actions/upload-artifact@v4
-      with:
-        name: impacto-habilidades-processed
-        path: data/processed/2025/impacto_habilidades/*
+    #- name: Subir artefacto processed - Impacto Habilidades
+    #  uses: actions/upload-artifact@v4
+    #  with:
+    #    name: impacto-habilidades-processed
+    #    path: data/processed/2025/impacto_habilidades/*
 
