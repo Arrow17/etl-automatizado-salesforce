@@ -48,10 +48,10 @@ jobs:
     - name: Ejecutar Extracurriculares 2025 - Descargar
       env:
         GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      run: python "etl/procesos/2025/2. asistencias_extracurriculares/01_descargar.py"
+      run: python "etl/procesos/2025/2. asistencia_extracurricular/01_descarga.py"
     
     - name: Ejecutar Extracurriculares 2025 - Transformación
-      run: python "etl/procesos/2025/2. asistencias_extracurriculares/02_transformacion.py"
+      run: python "etl/procesos/2025/2. asistencia_extracurricular/02_transformacion.py"
     
     - name: Ejecutar Consolidación - Extracurriculares
       run: python "etl/procesos/consolidacion/2_asistencia_extracurricular.py"
