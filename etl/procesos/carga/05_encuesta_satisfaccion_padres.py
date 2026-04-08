@@ -128,6 +128,7 @@ Formulario_Satisfaccion = Formulario_Satisfaccion.rename(columns={
     "Nombres del niño/a": "Nombres_del_nioa__c",
     "Apellido paterno ": "Apellido_paterno_1__c",
     "Apellido materno.1": "Apellido_materno1__c",
+    "Apellido materno 2": "Apellido_materno_2__c",
     "Documento de identidad Niño": "Documento_de_identidad_1__c",
     "N Documento Niño": "N_de_documento_1__c",
 
