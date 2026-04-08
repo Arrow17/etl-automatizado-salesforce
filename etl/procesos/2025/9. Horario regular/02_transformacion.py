@@ -8,8 +8,8 @@ import unicodedata
 # PATHS
 # ==========================================================
 
-INPUT_FILE = Path("data/raw/2025/10.horario_regular/horario_regular_2025.xlsx")
-OUTPUT_DIR = Path("data/processed/2025/10.horario_regular")
+INPUT_FILE = Path("data/raw/2025/9.horario_regular/horario_regular_2025.xlsx")
+OUTPUT_DIR = Path("data/processed/2025/9.horario_regular")
 OUTPUT_FILE = OUTPUT_DIR / "base_horaria_final.csv"
 
 SEMANAS_POR_BIMESTRE = 8
@@ -39,12 +39,12 @@ def cargar_excel():
     df = pd.read_excel(INPUT_FILE, sheet_name="Distribución horaria")
 
     df = df.drop(columns=["Unnamed: 0"], errors="ignore")
-    df = df.drop(index=[0,1,2,3], errors="ignore")
-    df = df.drop(index=range(60,72), errors="ignore")
+    df = df.drop(index=[0, 1, 2, 3], errors="ignore")
+    df = df.drop(index=range(60, 72), errors="ignore")
     df = df.drop(columns=["Unnamed: 6"], errors="ignore")
 
     df = df.iloc[:, :5].copy()
-    df.columns = ["concepto","CICLO_II","CICLO_III","CICLO_IV","CICLO_V"]
+    df.columns = ["concepto", "CICLO_II", "CICLO_III", "CICLO_IV", "CICLO_V"]
 
     return df
 
@@ -68,7 +68,7 @@ def construir_base():
 
     df["sede"] = df["concepto"].where(df["concepto"].isin(sedes_base)).bfill()
 
-    fila_var = df[df["concepto"]=="VARIABLES"].iloc[0]
+    fila_var = df[df["concepto"] == "VARIABLES"].iloc[0]
 
     map_grado = {
         "CICLO_II": fila_var["CICLO_II"],
@@ -80,12 +80,12 @@ def construir_base():
     df = df[df["concepto"].str.startswith("N° HORAS SEMANALES", na=False)].copy()
 
     df["area"] = df["concepto"].str.replace(
-        "N° HORAS SEMANALES |","",regex=False
+        "N° HORAS SEMANALES |", "", regex=False
     ).str.strip()
 
     df = df.melt(
-        id_vars=["sede","area"],
-        value_vars=["CICLO_II","CICLO_III","CICLO_IV","CICLO_V"],
+        id_vars=["sede", "area"],
+        value_vars=["CICLO_II", "CICLO_III", "CICLO_IV", "CICLO_V"],
         var_name="ciclo",
         value_name="horas_semanales"
     )
@@ -93,19 +93,19 @@ def construir_base():
     df["grado"] = df["ciclo"].map(map_grado)
     df["horas_semanales"] = pd.to_numeric(df["horas_semanales"], errors="coerce")
 
-    df = df.dropna(subset=["sede","grado","horas_semanales"])
+    df = df.dropna(subset=["sede", "grado", "horas_semanales"])
 
     expansion = {
-        "INICIAL":["INICIAL"],
-        "1ER Y 2DO GRADO":["1ER GRADO","2DO GRADO"],
-        "3ER Y 4TO GRADO":["3ER GRADO","4TO GRADO"],
-        "5TO Y 6TO GRADO":["5TO GRADO","6TO GRADO"]
+        "INICIAL": ["INICIAL"],
+        "1ER Y 2DO GRADO": ["1ER GRADO", "2DO GRADO"],
+        "3ER Y 4TO GRADO": ["3ER GRADO", "4TO GRADO"],
+        "5TO Y 6TO GRADO": ["5TO GRADO", "6TO GRADO"]
     }
 
     df["grado_detalle"] = df["grado"].map(expansion)
     df["grado_detalle"] = df["grado_detalle"].where(
         df["grado_detalle"].notna(),
-        df["grado"].apply(lambda x:[x])
+        df["grado"].apply(lambda x: [x])
     )
 
     df = df.explode("grado_detalle")
@@ -116,10 +116,10 @@ def construir_base():
     df["grado_detalle"] = df["grado_detalle"].apply(normalizar)
 
     # VENTANILLA
-    df_vent = df[df["sede"]=="VENTANILLA"].copy()
-    df_otros = df[df["sede"]!="VENTANILLA"].copy()
+    df_vent = df[df["sede"] == "VENTANILLA"].copy()
+    df_otros = df[df["sede"] != "VENTANILLA"].copy()
 
-    sedes_vent_detalle = ["01 PACHACUTEC","02 HDMP","03 SANTA ROSA"]
+    sedes_vent_detalle = ["01 PACHACUTEC", "02 HDMP", "03 SANTA ROSA"]
 
     replicas = []
     for s in sedes_vent_detalle:
@@ -130,11 +130,11 @@ def construir_base():
     df_vent = pd.concat(replicas, ignore_index=True)
 
     mapeo = {
-        "PUENTE PIEDRA":"04 PTE. PIEDRA",
-        "CUSCO":"05 CUSCO",
-        "HUANCAVELICA":"06 HUANCAVELICA",
-        "HUAROCHIRI":"07 HUAROCHIRI",
-        "VMT - PARAISO":"08 VMT PARAISO"
+        "PUENTE PIEDRA": "04 PTE. PIEDRA",
+        "CUSCO": "05 CUSCO",
+        "HUANCAVELICA": "06 HUANCAVELICA",
+        "HUAROCHIRI": "07 HUAROCHIRI",
+        "VMT - PARAISO": "08 VMT PARAISO"
     }
 
     df_otros["sede"] = df_otros["sede"].map(mapeo)
@@ -142,8 +142,8 @@ def construir_base():
     df = pd.concat([df_vent, df_otros], ignore_index=True)
 
     resumen = (
-        df.groupby(["sede","grado_detalle"],as_index=False)
-        .agg(total_horas_semanales=("horas_semanales","sum"))
+        df.groupby(["sede", "grado_detalle"], as_index=False)
+        .agg(total_horas_semanales=("horas_semanales", "sum"))
     )
 
     resumen["semanas_prom_bimestre"] = SEMANAS_POR_BIMESTRE
@@ -152,14 +152,14 @@ def construir_base():
     )
 
     bimestres = {
-        "04 PTE. PIEDRA":4.5,
-        "05 CUSCO":4.5,
-        "06 HUANCAVELICA":4.5,
-        "07 HUAROCHIRI":4.5,
-        "08 VMT PARAISO":4.5,
-        "01 PACHACUTEC":4,
-        "02 HDMP":4,
-        "03 SANTA ROSA":4
+        "04 PTE. PIEDRA": 4.5,
+        "05 CUSCO": 4.5,
+        "06 HUANCAVELICA": 4.5,
+        "07 HUAROCHIRI": 4.5,
+        "08 VMT PARAISO": 4.5,
+        "01 PACHACUTEC": 4,
+        "02 HDMP": 4,
+        "03 SANTA ROSA": 4
     }
 
     resumen["bimestres_anio"] = resumen["sede"].map(bimestres)
@@ -172,7 +172,7 @@ def construir_base():
 
     df = df.merge(
         resumen,
-        on=["sede","grado_detalle"],
+        on=["sede", "grado_detalle"],
         how="left"
     )
 
