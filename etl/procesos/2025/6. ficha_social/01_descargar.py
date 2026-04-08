@@ -3,8 +3,8 @@ import requests
 
 print("=== Descargando Google Sheets como Excel ===")
 
-FILE_ID = "1mjusMM5ZOo1d7o7l35Rum3jXMu1AlfkibP2AEGs89U0"  # NUEVO ID
-OUTPUT_PATH = "entrada/Ficha_Social.xlsx"
+FILE_ID = "1mjusMM5ZOo1d7o7l35Rum3jXMu1AlfkibP2AEGs89U0"
+OUTPUT_PATH = "data/raw/2025/6.ficha_social/Ficha_Social.xlsx"
 
 # URL de exportación correcta
 export_url = f"https://docs.google.com/spreadsheets/d/{FILE_ID}/export?format=xlsx"
@@ -32,7 +32,7 @@ if response.status_code != 200:
     print("Error en descarga:", response.text)
     raise SystemExit(1)
 
-os.makedirs("entrada", exist_ok=True)
+os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
 
 with open(OUTPUT_PATH, "wb") as f:
     f.write(response.content)
