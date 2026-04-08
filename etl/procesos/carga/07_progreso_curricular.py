@@ -72,6 +72,10 @@ if "ANIO_FUENTE" in Progreso_Curricular.columns:
     Progreso_Curricular = Progreso_Curricular.rename(
         columns={"ANIO_FUENTE": "ANIO_FUENTE__c"}
     )
+if "N DE PAGINAS" in Progreso_Curricular.columns:
+    Progreso_Curricular = Progreso_Curricular.rename(
+        columns={"N DE PAGINAS": "N_DE_PAGINAS__c"}
+    )
 
 
 # ==========================================================
