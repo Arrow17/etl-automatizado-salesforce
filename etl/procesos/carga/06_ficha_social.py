@@ -175,11 +175,11 @@ mapeo = {
     "Distrito.2": "Distrito2__c",
     "Distrito.3": "Distrito3__c",
 
-    # Si quieres mantener trazabilidad en Salesforce
     "ANIO_FUENTE": "ANIO_FUENTE__c"
 }
 
 df = df.rename(columns=mapeo)
+df = df.drop(columns=["Apellido materno.1"], errors="ignore")
 print("✔ Columnas renombradas para Salesforce")
 
 # ==========================================================
