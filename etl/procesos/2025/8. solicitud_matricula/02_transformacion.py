@@ -1,20 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-Script de Limpieza, Deduplicación y Reporte de Calidad.
-
-Este script toma un archivo Excel de "Solicitud de Matrícula",
-realiza una limpieza de datos, deduplica los registros de estudiantes
-basándose en su DNI (conservando solo el más reciente),
-y genera dos archivos de salida:
-
-1. Un .csv con los datos limpios y deduplicados ('Sol_Mtr_Deduplicado.csv').
-2. Un .xlsx con el reporte de calidad de los datos finales ('Sol_Mtr_Deduplicado_CALIDAD.xlsx').
-
-Librerías necesarias: pandas, numpy, openpyxl
-(Instalar con: pip install pandas numpy openpyxl)
-"""
 
 import pandas as pd
 import numpy as np
@@ -288,14 +274,11 @@ def limpiar_y_deduplicar_datos(file_path, output_filename_csv, output_filename_e
 
 if __name__ == "__main__":
 
-    # 1. Archivo descargado automáticamente desde Google Drive
-    input_path = "entrada/Solicitud_matricula.xlsx"
+    input_path = "data/raw/2025/8.solicitud_matricula/Solicitud_matricula.xlsx"
 
-    # 2. Carpeta de salida dentro del proyecto
-    output_folder = "salida"
+    output_folder = "data/processed/2025/8.solicitud_matricula"
     os.makedirs(output_folder, exist_ok=True)
 
-    # 3. Archivos de salida
     output_path_csv   = os.path.join(output_folder, "Sol_Mtr_Deduplicado.csv")
     output_path_excel = os.path.join(output_folder, "Sol_Mtr_Deduplicado_CALIDAD.xlsx")
 
@@ -314,8 +297,6 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(f"\n❌ Error durante la ejecución lógica: {e}")
-
-
 
 
 
