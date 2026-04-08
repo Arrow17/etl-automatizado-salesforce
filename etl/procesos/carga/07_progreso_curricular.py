@@ -73,6 +73,7 @@ if "ANIO_FUENTE" in Progreso_Curricular.columns:
         columns={"ANIO_FUENTE": "ANIO_FUENTE__c"}
     )
 
+
 # ==========================================================
 # 5️⃣ Agregar sufijo __c a columnas que aún no lo tienen
 # ==========================================================
@@ -90,6 +91,8 @@ Progreso_Curricular = Progreso_Curricular.replace({
     pd.NA: None,
     np.nan: None
 })
+
+Progreso_Curricular = Progreso_Curricular.drop(columns=["N DE PAGINAS__c"])
 
 # ==========================================================
 # 7️⃣ Debug opcional
