@@ -85,6 +85,16 @@ if "TEMAS" in Progreso_Curricular.columns:
     Progreso_Curricular = Progreso_Curricular.rename(
         columns={"TEMAS": "TEMAS__c"}
     )
+if "AREA" in Progreso_Curricular.columns:
+    Progreso_Curricular = Progreso_Curricular.rename(
+        columns={"AREA": "AREA__c"}
+    )
+
+if "AREAS" in Progreso_Curricular.columns:
+    Progreso_Curricular = Progreso_Curricular.rename(
+        columns={"AREAS": "AREA__c"}
+    )
+
 
 # ==========================================================
 # 5️⃣ Agregar sufijo __c a columnas que aún no lo tienen
