@@ -3,14 +3,16 @@ import requests
 
 print("=== Descargando Google Sheets como Excel ===")
 
-# Nuevo ID extraído del link
+# ID del archivo
 FILE_ID = "1ELmiuXjpfw644mck9pMLMROHeEBE1E29"
-OUTPUT_PATH = "entrada/Encuesta_Satisfaccion_Ninos.xlsx"
 
-# URL correcta de exportación a Excel
+# Ruta correcta (ALINEADA)
+OUTPUT_PATH = "data/raw/2025/5.encuesta_satisfaccion_ninos/Encuesta_Satisfaccion_Ninos.xlsx"
+
+# URL export
 export_url = f"https://docs.google.com/spreadsheets/d/{FILE_ID}/export?format=xlsx"
 
-# Autenticación con service account
+# Autenticación
 from google.oauth2.service_account import Credentials
 from google.auth.transport.requests import AuthorizedSession
 
@@ -33,10 +35,10 @@ if response.status_code != 200:
     print("Error en descarga:", response.text)
     raise SystemExit(1)
 
-os.makedirs("entrada", exist_ok=True)
+# Crear carpeta correctamente
+os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
 
 with open(OUTPUT_PATH, "wb") as f:
     f.write(response.content)
 
 print(f"✓ Archivo descargado correctamente → {OUTPUT_PATH}")
-
