@@ -160,6 +160,7 @@ mapeo = {
 }
 
 df = df.rename(columns=mapeo)
+df = df.drop(columns=["Nombre/s del niño/a"])
 
 # ==========================================================
 # 6️⃣ Convertir fechas
