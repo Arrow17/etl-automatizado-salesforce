@@ -76,7 +76,15 @@ if "N DE PAGINAS" in Progreso_Curricular.columns:
     Progreso_Curricular = Progreso_Curricular.rename(
         columns={"N DE PAGINAS": "N_DE_PAGINAS__c"}
     )
+if "TEMA" in Progreso_Curricular.columns:
+    Progreso_Curricular = Progreso_Curricular.rename(
+        columns={"TEMA": "TEMAS__c"}
+    )
 
+if "TEMAS" in Progreso_Curricular.columns:
+    Progreso_Curricular = Progreso_Curricular.rename(
+        columns={"TEMAS": "TEMAS__c"}
+    )
 
 # ==========================================================
 # 5️⃣ Agregar sufijo __c a columnas que aún no lo tienen
