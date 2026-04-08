@@ -96,8 +96,6 @@ Progreso_Curricular = Progreso_Curricular.replace({
     np.nan: None
 })
 
-Progreso_Curricular = Progreso_Curricular.drop(columns=["N DE PAGINAS__c"])
-
 # ==========================================================
 # 7️⃣ Debug opcional
 # ==========================================================
