@@ -7,7 +7,7 @@ print("=== Descargando Google Sheets como Excel ===")
 FILE_ID = "19RR_orn9TGn0R5rfuWcvBqPJkAlENlbygq5AIAuhsBI"
 
 # Ruta donde guardarás el Excel
-OUTPUT_PATH = "entrada/Solicitud_matricula.xlsx"
+OUTPUT_PATH = "data/raw/2025/8.solicitud_matricula/Solicitud_matricula.xlsx"
 
 # URL correcta para exportar Google Sheets a Excel
 export_url = f"https://docs.google.com/spreadsheets/d/{FILE_ID}/export?format=xlsx"
@@ -35,10 +35,9 @@ if response.status_code != 200:
     print("Error en descarga:", response.text)
     raise SystemExit(1)
 
-os.makedirs("entrada", exist_ok=True)
+os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
 
 with open(OUTPUT_PATH, "wb") as f:
     f.write(response.content)
 
 print(f"✓ Archivo descargado correctamente → {OUTPUT_PATH}")
-
