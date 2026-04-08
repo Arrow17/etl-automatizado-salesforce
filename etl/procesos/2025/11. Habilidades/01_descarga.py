@@ -20,9 +20,8 @@ FILE_NAME = os.getenv(
     "PE25_Ventanilla y proyectos_Habilidades.xlsx"
 )
 
-RAW_DIR = Path("data/raw/2025/impacto_habilidades")
-RAW_FILE_PATH = RAW_DIR / "pe25_ventanilla_proyectos_habilidades.xlsx"
-
+RAW_DIR = Path("data/raw/2025/11.habilidades")
+RAW_FILE_PATH = RAW_DIR / "impacto_habilidades_2025.xlsx"
 
 def validar_configuracion() -> None:
     faltantes = []
