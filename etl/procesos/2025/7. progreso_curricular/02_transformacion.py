@@ -4,8 +4,8 @@ import unicodedata
 import pandas as pd
 
 
-INPUT_FILE = Path("data/raw/2025/progreso_curricular/curricula_after_school_2025.xlsx")
-OUTPUT_DIR = Path("data/processed/2025/progreso_curricular")
+INPUT_FILE = Path("data/raw/2025/7.progreso_curricular/curricula_after_school_2025.xlsx")
+OUTPUT_DIR = Path("data/processed/2025/7.progreso_curricular")
 OUTPUT_FILE = OUTPUT_DIR / "BD_Curricula_Consolidada.csv"
 
 HOJAS_VALIDAS = [
