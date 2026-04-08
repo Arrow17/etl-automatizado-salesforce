@@ -18,8 +18,8 @@ FILE_NAME = os.getenv(
     "01 CRONOGRAMA DE VOLUNTARIADO 2025.xlsx"
 )
 
-RAW_DIR = Path("data/raw/2025/asistencia_actividades_vivenciales")
-RAW_FILE_PATH = RAW_DIR / "cronograma_actividades_vivenciales_2025.xlsx"
+RAW_DIR = Path("data/raw/2025/10.asistencia_actividades_vivenciales")
+RAW_FILE_PATH = RAW_DIR / "asistencia_actividades_vivenciales_2025.xlsx"
 
 
 def get_access_token():
