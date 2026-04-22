@@ -24,7 +24,7 @@ else:
 
 # Parámetros de lectura por hoja
 FILA_ENCABEZADO = 6      # C7 ⇒ fila 7 en Excel; pandas usa base 0, por eso header=6
-COLUMNA_INICIO = "C"     # Punto de partida (C); el rango se expandirá dinámicamente
+COLUMNA_INICIO = "A"     # Punto de partida (C); el rango se expandirá dinámicamente
 EXTS = {".xlsx", ".xls", ".xlsm"}  # Extensiones válidas
 SALIDA = CARPETA_SALIDA / "asistencias_extra_consolidado_kantaya.csv"  # Nombre del CSV de salida
 SALIDA_CALIDAD = CARPETA_SALIDA / "asistencias_extraconsolidado_kantaya_CALIDAD.xlsx" # <-- NUEVO
