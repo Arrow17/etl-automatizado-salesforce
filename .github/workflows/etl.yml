@@ -2,7 +2,7 @@ name: ETL-Automatico-Salesforce
 
 on:
   schedule:
-  - cron: "*/30 * * * *"
+  - cron: "0 13,17,21,23 * * 1-5"
   workflow_dispatch:
 
 jobs:
@@ -291,4 +291,5 @@ jobs:
       with:
         name: data-artifacts
         path: data/**
+        retention-days: 1
 
